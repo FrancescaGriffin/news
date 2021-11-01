@@ -105,7 +105,7 @@ const seed = (data) => {
     comment.created_at,
     comment.body
   ])
-  );
+  )
   return db.query(insertStr)
 })
 };
