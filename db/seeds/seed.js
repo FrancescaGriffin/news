@@ -1,4 +1,5 @@
 const db = require("../connection")
+const format = require('pg-format')
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
@@ -47,11 +48,20 @@ const seed = (data) => {
       body TEXT NOT NULL
     );`)
   })
-
+  .then(()=>{
+    const insertStr = format(`
+    INSERT INTO topics (slug, description) 
+    VALUES 
+    %L
+    RETURNING *;`,
+    topicData.map((topic) => [
+      topic.slug,
+      topic.description
+    ])
+    );
+    return db.query(insertStr);
+});
 };
 
+
 module.exports = seed;
-
-
-  // 1. create tables
-  // 2. insert data
