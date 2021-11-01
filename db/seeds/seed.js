@@ -60,7 +60,21 @@ const seed = (data) => {
     ])
     );
     return db.query(insertStr);
-});
+})
+.then(()=>{
+  const insertStr = format(`
+  INSERT INTO users (username, name, avatar_url)
+  VALUES 
+  %L
+  RETURNING *;`,
+  userData.map((user) => [
+    user.username,
+    user.name,
+    user.avatar_url
+  ])
+  );
+  return db.query(insertStr);
+})
 };
 
 
