@@ -29,7 +29,7 @@ const seed = (data) => {
   })
   .then(()=>{
     return db.query(`CREATE TABLE articles (
-    article_id INT PRIMARY KEY,
+    article_id SERIAL PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
     topic VARCHAR(150) NOT NULL REFERENCES topics(slug),
     author VARCHAR(200) NOT NULL REFERENCES users(username),
@@ -40,7 +40,7 @@ const seed = (data) => {
   })
   .then(()=>{
     return db.query(`CREATE TABLE comments (
-      comment_id INT PRIMARY KEY,
+      comment_id SERIAL PRIMARY KEY,
       author VARCHAR(200) NOT NULL REFERENCES users(username),
       article_id INT NOT NULL REFERENCES articles(article_id),
       votes INT DEFAULT 0,
@@ -75,7 +75,39 @@ const seed = (data) => {
   );
   return db.query(insertStr);
 })
+.then(()=> {
+  const insertStr = format(`
+  INSERT INTO articles (title, topic, author, body, created_at, votes) 
+  VALUES 
+  %L 
+  RETURNING *;`, 
+  articleData.map((article) => [
+  article.title,
+  article.topic,
+  article.author,
+  article.body,
+  article.created_at,
+  article.votes
+  ])
+  );
+  return db.query(insertStr)
+})
+.then(()=>{
+  const insertStr = format(`
+  INSERT INTO comments (author, article_id, votes, created_at, body) 
+  VALUES
+  %L
+  RETURNING *`,
+  commentData.map((comment)=>[
+    comment.author,
+    comment.article_id,
+    comment.votes,
+    comment.created_at,
+    comment.body
+  ])
+  );
+  return db.query(insertStr)
+})
 };
-
 
 module.exports = seed;
