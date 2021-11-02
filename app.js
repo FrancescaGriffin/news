@@ -3,6 +3,8 @@ const app = express();
 const apiRouter = require("./routers/api-router")
 const { handlePSQLErrors, handle500Errors, handleCustomErrors} = require("./errors")
 
+app.use(express.json());
+
 app.use("/api", apiRouter)
 
 

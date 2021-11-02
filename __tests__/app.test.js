@@ -28,7 +28,7 @@ describe("GET /api/topics", ()=>{
                 })
             })
         })
-    });
+});
 
 describe("GET /api/articles/", ()=>{
     it("should return status 200 and article matching the input article_id param", ()=>{
@@ -71,13 +71,25 @@ describe("GET /api/articles/", ()=>{
         })
     })
 })
+describe("Patch /api/articles/:article_id", () => {
+    it("should return status 200 and increase votes by 1", ()=>{
+        const increaseVotes = { inc_votes : 1 }
+        return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
+            expect(body.article).toEqual({
+                article_id: 1,
+                title: 'Living in the shadow of a great man',
+                topic: 'mitch',
+                author: 'butter_bridge',
+                body: 'I find this existence challenging',
+                created_at: expect.any(String),
+                votes: 101
+        })
+    })
+})
+
+})
 
 });
-
-
-// 400 bad request api/articles/dogs //
-// 404 not found api/articles/21 - valid but doesn't exist 
-// 200 ok api/article/2 - valid but no comments - how to do this //
 
 // - 200 OK
 // - 201 Created
