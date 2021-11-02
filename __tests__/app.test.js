@@ -65,6 +65,11 @@ describe("GET /api/articles/", ()=>{
             expect(body.msg).toEqual(`Invalid Input!`)
         })
     })
+    it("should return status 404 when input article_id in valid but doesn't exist", ()=>{
+        return request(app).get(`/api/articles/100`).expect(404).then(({body})=>{
+            expect(body.msg).toEqual('No articles found!')
+        })
+    })
 })
 
 });
