@@ -61,7 +61,7 @@ describe("GET /api/articles/", ()=>{
         })
     })
     it("should return status 400 when input article_id in invalid", ()=>{
-        return request(app).get(`/api/articles/dogs`).expect(400).then(({body})=>{
+        return request(app).get(`/api/articles/invalid`).expect(400).then(({body})=>{
             expect(body.msg).toEqual(`Invalid Input!`)
         })
     })
