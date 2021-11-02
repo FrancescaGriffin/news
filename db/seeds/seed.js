@@ -60,8 +60,8 @@ const seed = (data) => {
     ])
     );
     return db.query(insertStr);
-})
-.then(()=>{
+  })
+  .then(()=>{
   const insertStr = format(`
   INSERT INTO users (username, name, avatar_url)
   VALUES 
@@ -74,8 +74,8 @@ const seed = (data) => {
   ])
   );
   return db.query(insertStr);
-})
-.then(()=> {
+  })
+  .then(()=> {
   const insertStr = format(`
   INSERT INTO articles (title, topic, author, body, created_at, votes) 
   VALUES 
@@ -91,8 +91,8 @@ const seed = (data) => {
   ])
   );
   return db.query(insertStr)
-})
-.then(()=>{
+  })
+  .then(()=>{
   const insertStr = format(`
   INSERT INTO comments (author, article_id, votes, created_at, body) 
   VALUES
@@ -107,7 +107,7 @@ const seed = (data) => {
   ])
   )
   return db.query(insertStr)
-})
+  })
 };
 
 module.exports = seed;

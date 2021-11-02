@@ -1,8 +1,9 @@
-const {fetchArticles} = require("../models/articles-model");
+const articles = require("../db/data/test-data/articles");
+const {fetchArticle} = require("../models/articles-model");
 
-exports.getArticles = (req, res, next) => {
-    
-    fetchArticles().then(()=>{
-
+exports.getArticle = (req, res, next) => {
+    const { article_id } = req.params
+    fetchArticle(article_id).then((article)=>{
+        res.status(200).send({article})
     })
-}
+};
