@@ -9,7 +9,7 @@ afterAll(() => db.end());
 
 describe("app", ()=>{
     it("api/not-an-endpoint", ()=>{
-        return request(app).get("/not-an-endpoint").expect(404).then(({body}) => {
+        return request(app).get("/api/not-an-endpoint").expect(404).then(({body}) => {
             expect(body.msg).toBe("Path not found!")
         })
     })
