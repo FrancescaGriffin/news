@@ -14,7 +14,7 @@ describe("app", ()=>{
         })
     })
 
-describe("GET /api/topics/", ()=>{
+    describe("GET /api/topics/", ()=>{
     it("should return status 200 and an object with key name : array of objects", ()=>{
         return request(app).get("/api/topics").expect(200).then(({body})=>{
             expect(body.topics.length).toBe(3)
@@ -28,9 +28,9 @@ describe("GET /api/topics/", ()=>{
                 })
             })
         })
-});
+    });
 
-describe("GET /api/articles/:article_id", ()=>{
+    describe("GET /api/articles/:article_id", ()=>{
     it("should return status 200 and article matching the input article_id param", ()=>{
         return request(app).get(`/api/articles/1`).expect(200).then(({body})=>{
             expect(body.article).toEqual({
@@ -70,9 +70,9 @@ describe("GET /api/articles/:article_id", ()=>{
             expect(body.msg).toEqual('No articles found!')
         })
      })
-});
+    });
 
-describe("PATCH /api/articles/:article_id", () => {
+    describe("PATCH /api/articles/:article_id", () => {
     const increaseVotes = { inc_votes : 1 }
     it("should return status 200 and increase votes by 1", ()=>{
         return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
@@ -121,9 +121,9 @@ describe("PATCH /api/articles/:article_id", () => {
        })
     });    
 
-});
+    });
 
-describe("GET /api/articles", ()=>{
+    describe("GET /api/articles", ()=>{
     it("should return status 200 and an articles array of article objects ", ()=>{
         return request(app).get("/api/articles").expect(200).then(({body})=>{
             expect(body.articles).toBeInstanceOf(Array);
@@ -176,7 +176,7 @@ describe("GET /api/articles", ()=>{
         })
     });
 
-    it.only("should return status 200 and the articles filtered if topic value specified in the query", () => {
+    it("should return status 200 and the articles filtered by topic value specified in the query", ()=>{
         return request(app).get("/api/articles?topic=cats").expect(200).then(({body})=>{
             expect(body.articles).toBeInstanceOf(Array);
             expect(body.articles).toHaveLength(1);
@@ -184,12 +184,47 @@ describe("GET /api/articles", ()=>{
         })
     })
 
+    it("should return status 200 and the articles filtered by author value specified in the query", ()=>{
+        return request(app).get("/api/articles?author=butter_bridge").expect(200).then(({body})=>{
+            console.log(body)
+            expect(body.articles).toBeInstanceOf(Array);
+            expect(body.articles).toHaveLength(3);
+            expect(body.articles[0].author).toEqual('butter_bridge')
+        })
+    })
 
+
+    it("should return status 400 when sort_by column does not exist", ()=>{
+        return request(app).get("/api/articles?sort_by=does_not_exist").expect(400).then(({body})=>{
+            expect(body.msg).toEqual("Invalid sort_by query!")
+            });
+        });
+    
+    it("should return status 400 when order query !== asc || desc", ()=>{
+        return request(app).get("/api/articles?order=orange").expect(400).then(({body})=>{
+            expect(body.msg).toEqual("Invalid order query!")
+            });
+        });
+
+    // it("should return status 400 when the topic is not in the database", ()=>{
+    //     return request(app).get("/api/articles?topic=bananas").expect(400).then(({body})=>{
+    //         c
+    //         expect(body.msg).toEqual("?")
+    //         });
+    //     });
+
+    });
 
 });
 
-});
+// GET /api/articles
+// Bad queries:
+// sort_by a column that doesn't exist
+// order !== "asc" / "desc"
 
+// author / topic that is not in the database
+
+// author / topic that exists but does not have any articles associated with it
 
 
 // - 200 OK
@@ -199,5 +234,4 @@ describe("GET /api/articles", ()=>{
 // - 404 Not Found
 // - 405 Method Not Allowed
 // - 418 I'm a teapot
-// - 422 Unprocessable Entity
-// - 500 Internal Server Error
+
