@@ -186,7 +186,6 @@ describe("app", ()=>{
 
     it("should return status 200 and the articles filtered by author value specified in the query", ()=>{
         return request(app).get("/api/articles?author=butter_bridge").expect(200).then(({body})=>{
-            console.log(body)
             expect(body.articles).toBeInstanceOf(Array);
             expect(body.articles).toHaveLength(3);
             expect(body.articles[0].author).toEqual('butter_bridge')
