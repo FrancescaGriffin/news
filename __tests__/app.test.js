@@ -12,7 +12,7 @@ describe("app", ()=>{
         return request(app).get("/api/not-an-endpoint").expect(404).then(({body}) => {
             expect(body.msg).toBe("Path not found!")
         })
-    })
+        })
 
     describe("GET /api/topics/", ()=>{
     it("should return status 200 and an object with key name : array of objects", ()=>{
@@ -44,7 +44,7 @@ describe("app", ()=>{
                 comment_count: 11
             })
         })
-    })
+        })
 
     it("should return status 200 and article matching the input article_id param", ()=>{
         return request(app).get(`/api/articles/2`).expect(200).then(({body})=>{
@@ -59,20 +59,20 @@ describe("app", ()=>{
                 comment_count: 0
             })
         })
-    })
+        })
     it("should return status 400 when input article_id is invalid", ()=>{
         return request(app).get(`/api/articles/invalid`).expect(400).then(({body})=>{
             expect(body.msg).toEqual(`Invalid Input!`)
         })
-    })
+        })
     it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
         return request(app).get(`/api/articles/100`).expect(404).then(({body})=>{
             expect(body.msg).toEqual('No article found!')
         })
-     })
+        })
     });
 
-    describe("PATCH /api/articles/:article_id", () => {
+    describe("PATCH /api/articles/:article_id", ()=>{
     const increaseVotes = { inc_votes : 1 }
     it("should return status 200 and increase votes by 1", ()=>{
         return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
@@ -86,40 +86,40 @@ describe("app", ()=>{
                 votes: 101
             })
         })
-    });
+        });
 
     it("should return status 400 when input article_id is invalid", ()=>{
         return request(app).patch(`/api/articles/invalid`).send(increaseVotes).expect(400).then(({body})=>{
             expect(body.msg).toEqual(`Invalid Input!`)
         })
-    });
+        });
 
     it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
         return request(app).patch(`/api/articles/100`).send(increaseVotes).expect(404).then(({body})=>{
             expect(body.msg).toEqual('No article found!')
         })
-     });
+        });
      
      it("should return status 400 with invalid inc_votes input e.g.{ inc_votes: 'cat'}", ()=>{
          const badPatchRequest = { inc_votes: 'cat'}
         return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
             expect(body.msg).toEqual('Invalid Input!')
         })
-     }); 
+        }); 
 
      it("should return status 400 when there is more than one property on the request body e.g.{ inc_votes: 'cat', name: 'mitch' }", ()=>{
         const badPatchRequest = { inc_votes: 'cat', name: 'mitch' }
        return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
            expect(body.msg).toEqual('Invalid Input!')
        })
-    }); 
+        }); 
 
     it("should return status 400 with invalid inc_votes input e.g.{ incVotes: 1 }", ()=>{
         const badPatchRequest = { not_inVotes: 1 }
        return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
            expect(body.msg).toEqual('Invalid Input!')
        })
-    });    
+        });    
 
     });
 
@@ -141,7 +141,7 @@ describe("app", ()=>{
                 })
          })
      })
-    });
+        });
     
     it("should return status 200 and the articles array sort_by defaulted to date", ()=>{
         return request(app).get("/api/articles").expect(200).then(({body})=>{
@@ -151,7 +151,7 @@ describe("app", ()=>{
                 descending: true })
 
         })
-    });
+        });
 
     it("should return status 200 and the articles array sort_by votes", ()=>{
         return request(app).get("/api/articles?sort_by=votes").expect(200).then(({body})=>{
@@ -159,7 +159,7 @@ describe("app", ()=>{
             expect(body.articles).toHaveLength(12);
             expect(body.articles).toBeSortedBy('votes', { descending: true })
         })
-    });
+        });
 
     it("should return status 200 and the articles array order by default to descending", ()=>{
         return request(app).get("/api/articles?sort_by=article_id").expect(200).then(({body})=>{
@@ -167,7 +167,7 @@ describe("app", ()=>{
             expect(body.articles).toHaveLength(12);
             expect(body.articles).toBeSorted({ descending: true })
         })
-    });
+        });
 
     it("should return status 200 and the articles array order should be ascending", ()=>{
         return request(app).get("/api/articles?order=asc").expect(200).then(({body})=>{
@@ -175,7 +175,7 @@ describe("app", ()=>{
             expect(body.articles).toHaveLength(12);
             expect(body.articles).toBeSorted()
         })
-    });
+        });
 
     it("should return status 200 and the articles filtered by topic value specified in the query", ()=>{
         return request(app).get("/api/articles?topic=cats").expect(200).then(({body})=>{
@@ -183,7 +183,7 @@ describe("app", ()=>{
             expect(body.articles).toHaveLength(1);
             expect(body.articles[0].topic).toEqual('cats')
         })
-    })
+        })
 
     it("should return status 200 and the articles filtered by author value specified in the query", ()=>{
         return request(app).get("/api/articles?author=butter_bridge").expect(200).then(({body})=>{
@@ -191,7 +191,7 @@ describe("app", ()=>{
             expect(body.articles).toHaveLength(3);
             expect(body.articles[0].author).toEqual('butter_bridge')
         })
-    })
+        })
 
     it("should return status 400 when sort_by column does not exist", ()=>{
         return request(app).get("/api/articles?sort_by=does_not_exist").expect(400).then(({body})=>{
@@ -231,10 +231,10 @@ describe("app", ()=>{
 
     });
 
-    describe.only("GET /api/articles/:article_id/comments", ()=>{
-        it("should return status 200 and an array of comments for the given article_id", ()=>{
-            return request(app).get(`/api/articles/1/comments`).expect(200).then(({body})=>{
-                expect(body.comments).toHaveLength(11);
+    describe("GET /api/articles/:article_id/comments", ()=>{
+        it("should return status 200 and array of comments for the given article_id", ()=>{
+            return request(app).get(`/api/articles/9/comments`).expect(200).then(({body})=>{
+                expect(body.comments).toHaveLength(2);
                 body.comments.forEach((comment) =>{
                     expect(comment).toMatchObject({
                         comment_id: expect.any(Number),
@@ -247,16 +247,22 @@ describe("app", ()=>{
             })
         })
 
-});
+        it("should return status 404 when input article_id is valid but article has no comments ", ()=>{
+           return request(app).get("/api/articles/2/comments").expect(400).then(({body})=>{
+                expect(body.msg).toEqual("No comments found!")
+            })
+        })
+
+        it("should return status 400 when input article_id is invalid", ()=>{
+            return request(app).get("/api/articles/not_valid/comments").expect(400).then(({body})=>{
+                 expect(body.msg).toEqual("Invalid Input!")
+             })
+         })
 
 });
+});
 
 
-// - 200 OK
-// - 201 Created
-// - 204 No Content
-// - 400 Bad Request
-// - 404 Not Found
-// - 405 Method Not Allowed
-// - 418 I'm a teapot
-
+// 400 bad request - invalid params
+// 404 not found - valid but doesn't exist
+// 404 not found - existing article with no comments attached
