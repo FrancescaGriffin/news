@@ -60,21 +60,21 @@ describe("GET /api/articles/", ()=>{
             })
         })
     })
-    it("should return status 400 when input article_id in invalid", ()=>{
+    it("should return status 400 when input article_id is invalid", ()=>{
         return request(app).get(`/api/articles/invalid`).expect(400).then(({body})=>{
             expect(body.msg).toEqual(`Invalid Input!`)
         })
     })
-    it("should return status 404 when input article_id in valid but doesn't exist", ()=>{
+    it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
         return request(app).get(`/api/articles/100`).expect(404).then(({body})=>{
             expect(body.msg).toEqual('No articles found!')
         })
+     })
     })
-})
 
 describe("Patch /api/articles/:article_id", () => {
+    const increaseVotes = { inc_votes : 1 }
     it("should return status 200 and increase votes by 1", ()=>{
-        const increaseVotes = { inc_votes : 1 }
         return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
             expect(body.article).toEqual({
                 article_id: 1,
@@ -86,29 +86,45 @@ describe("Patch /api/articles/:article_id", () => {
                 votes: 101
             })
         })
-    })
-    it("should return status 200 and increase votes by 1", ()=>{
-        const increaseVotes = { inc_votes : 1 }
-        return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
-            expect(body.article).toEqual({
-                article_id: 1,
-                title: 'Living in the shadow of a great man',
-                topic: 'mitch',
-                author: 'butter_bridge',
-                body: 'I find this existence challenging',
-                created_at: expect.any(String),
-                votes: 101
-            })
+    });
+
+    it("should return status 400 when input article_id is invalid", ()=>{
+        return request(app).patch(`/api/articles/invalid`).send(increaseVotes).expect(400).then(({body})=>{
+            expect(body.msg).toEqual(`Invalid Input!`)
         })
-    })
+    });
+
+    it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
+        return request(app).patch(`/api/articles/100`).send(increaseVotes).expect(404).then(({body})=>{
+            expect(body.msg).toEqual('No articles found!')
+        })
+     });
+     
+     it("should return status 400 with invalid inc_votes input e.g.{ inc_votes: 'cat'}", ()=>{
+         const badPatchRequest = { inc_votes: 'cat'}
+        return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
+            expect(body.msg).toEqual('Invalid Input!')
+        })
+     }); 
+
+     it("should return status 400 when there is more than one property on the request body e.g.{ inc_votes: 'cat', name: 'mitch' }", ()=>{
+        const badPatchRequest = { inc_votes: 'cat', name: 'mitch' }
+       return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
+           expect(body.msg).toEqual('Invalid Input!')
+       })
+    }); 
+
+    it("should return status 400 with invalid inc_votes input e.g.{ incVotes: 1 }", ()=>{
+        const badPatchRequest = { not_inVotes: 1 }
+       return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
+           console.log(body)
+           expect(body.msg).toEqual('Invalid Input!')
+       })
+    });    
 
 })
-
 });
 
-//  return 404 no articles found! - with valid param that doesn't exist
-// return 400 bad request - Invalid inc_votes (e.g. { inc_votes : "cat" })
-// return 204 
 
 
 // - 200 OK
@@ -120,7 +136,3 @@ describe("Patch /api/articles/:article_id", () => {
 // - 418 I'm a teapot
 // - 422 Unprocessable Entity
 // - 500 Internal Server Error
-
-// No inc_votes on request body
-// Invalid inc_votes (e.g. { inc_votes : "cat" })
-// Some other property on request body (e.g. { inc_votes : 1, name: 'Mitch' })

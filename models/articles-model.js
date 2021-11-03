@@ -14,9 +14,14 @@ exports.fetchArticle = (article_id)=>{
 };
 
 exports.updateArticle = (inc_votes, article_id) => {
-    
-   return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [inc_votes, article_id])
+    if (!inc_votes) {
+        return Promise.reject({ status: 400, msg: 'Invalid Input!'})
+    }
+    return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [inc_votes, article_id])
    .then(({rows})=>{
+    if(rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'No articles found!'})
+    }
        return rows[0]
    });
 };
