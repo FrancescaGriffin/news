@@ -177,10 +177,10 @@ describe("GET /api/articles", ()=>{
     });
 
     it.only("should return status 200 and the articles filtered if topic value specified in the query", () => {
-        return request(app).get("/api/articles/topic=cats").expect(200).then(({body})=>{
+        return request(app).get("/api/articles?topic=cats").expect(200).then(({body})=>{
             expect(body.articles).toBeInstanceOf(Array);
             expect(body.articles).toHaveLength(1);
-            expect(body.articles.topic).toEqual('cats')
+            expect(body.articles[0].topic).toEqual('cats')
         })
     })
 

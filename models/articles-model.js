@@ -26,7 +26,7 @@ exports.updateArticle = (inc_votes, article_id) => {
    });
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "desc") => {
+exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
     if(!['article_id', 'created_at', 'votes'].includes(sort_by)) {
         return Promise.reject({ status: 400, msg: "Invalid sort_by_query!"})
     }
@@ -45,17 +45,21 @@ exports.fetchArticles = (sort_by = "created_at", order = "desc") => {
     COUNT(comment_id) ::INT AS comment_count 
     FROM articles LEFT OUTER JOIN comments ON comments.article_id = articles.article_id`;
     
-    
-    
-    GROUP BY articles.article_id 
-    ORDER BY articles.${sort_by} ${order};`
+    const queryArray = [];
 
+    if(topic) {
+        queryArray.push(topic)
+        queryStr += ` WHERE topic = $1`;
+    }
 
+    queryStr += 
+    `GROUP BY articles.article_id 
+    ORDER BY articles.${sort_by} ${order};`;
 
-    return db.query(queryStr, 
+    return db.query(queryStr, queryArray)
     .then(({rows})=>{
         return rows
-    })
+    });
 };  
 
 
