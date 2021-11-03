@@ -67,7 +67,7 @@ describe("app", ()=>{
     })
     it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
         return request(app).get(`/api/articles/100`).expect(404).then(({body})=>{
-            expect(body.msg).toEqual('No articles found!')
+            expect(body.msg).toEqual('No article found!')
         })
      })
     });
@@ -96,7 +96,7 @@ describe("app", ()=>{
 
     it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
         return request(app).patch(`/api/articles/100`).send(increaseVotes).expect(404).then(({body})=>{
-            expect(body.msg).toEqual('No articles found!')
+            expect(body.msg).toEqual('No article found!')
         })
      });
      
@@ -124,6 +124,7 @@ describe("app", ()=>{
     });
 
     describe("GET /api/articles", ()=>{
+
     it("should return status 200 and an articles array of article objects ", ()=>{
         return request(app).get("/api/articles").expect(200).then(({body})=>{
             expect(body.articles).toBeInstanceOf(Array);
@@ -178,7 +179,7 @@ describe("app", ()=>{
 
     it("should return status 200 and the articles filtered by topic value specified in the query", ()=>{
         return request(app).get("/api/articles?topic=cats").expect(200).then(({body})=>{
-            expect(body.articles).toBeInstanceOf(Array);
+            // expect(body.articles).toBeInstanceOf(Array);
             expect(body.articles).toHaveLength(1);
             expect(body.articles[0].topic).toEqual('cats')
         })
@@ -192,7 +193,6 @@ describe("app", ()=>{
         })
     })
 
-
     it("should return status 400 when sort_by column does not exist", ()=>{
         return request(app).get("/api/articles?sort_by=does_not_exist").expect(400).then(({body})=>{
             expect(body.msg).toEqual("Invalid sort_by query!")
@@ -205,12 +205,33 @@ describe("app", ()=>{
             });
         });
 
-    // it("should return status 400 when the topic is not in the database", ()=>{
-    //     return request(app).get("/api/articles?topic=bananas").expect(400).then(({body})=>{
-    //         c
-    //         expect(body.msg).toEqual("?")
-    //         });
-    //     });
+    it("should return status 404 when topic exists but does not have any articles associated with it", ()=>{
+        return request(app).get("/api/articles?topic=paper").expect(404).then(({body})=>{
+            expect(body.msg).toEqual("No articles found!")
+            });
+        });
+
+    it("should return status 404 when author exists but does not have any articles associated with it", ()=>{
+        return request(app).get("/api/articles?author=lurker").expect(404).then(({body})=>{
+            expect(body.msg).toEqual("No articles found!")
+            });
+        });    
+
+    it("should return status 400 when input topic is invalid", ()=>{
+        return request(app).get(`/api/articles?topic=apples`).expect(400).then(({body})=>{
+            expect(body.msg).toEqual(`Invalid query!`)
+            });
+        });
+         
+    it("should return status 400 when input author is invalid", ()=>{
+        return request(app).get(`/api/articles?author=kiwi`).expect(400).then(({body})=>{
+            expect(body.msg).toEqual(`Invalid query!`)
+            });
+        });
+        
+    
+    
+    
 
     });
 
@@ -218,12 +239,8 @@ describe("app", ()=>{
 
 // GET /api/articles
 // Bad queries:
-// sort_by a column that doesn't exist
-// order !== "asc" / "desc"
-
 // author / topic that is not in the database
 
-// author / topic that exists but does not have any articles associated with it
 
 
 // - 200 OK

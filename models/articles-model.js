@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { topicData } = require("../db/data/test-data");
 
 exports.fetchArticle = (article_id)=>{
     return db.query(`SELECT articles.*, COUNT(comment_id) ::INT AS comment_count 
@@ -7,7 +8,7 @@ exports.fetchArticle = (article_id)=>{
     GROUP BY articles.article_id;`, [article_id])
     .then (({rows})=>{
         if(rows.length === 0) {
-            return Promise.reject({ status: 404, msg: 'No articles found!'})
+            return Promise.reject({ status: 404, msg: 'No article found!'})
         }
    return rows[0]
 });
@@ -20,20 +21,21 @@ exports.updateArticle = (inc_votes, article_id) => {
     return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [inc_votes, article_id])
    .then(({rows})=>{
     if(rows.length === 0) {
-        return Promise.reject({ status: 404, msg: 'No articles found!'})
+        return Promise.reject({ status: 404, msg: 'No article found!'})
     }
        return rows[0]
    });
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "desc", topic, author) => {
+exports.fetchArticles = async (sort_by = "created_at", order = "desc", topic, author) => {
+    
     if(!['article_id', 'title', 'topic', 'author', 'created_at', 'votes', 'comment_count'].includes(sort_by)) {
         return Promise.reject({ status: 400, msg: "Invalid sort_by query!"})
-    }
+    };
 
     if(!['asc', 'desc'].includes(order)) {
         return Promise.reject({ status: 400, msg: "Invalid order query!"})
-    }
+    };
 
     let queryStr = `SELECT 
     articles.article_id, 
@@ -48,22 +50,64 @@ exports.fetchArticles = (sort_by = "created_at", order = "desc", topic, author) 
     const queryArray = [];
 
     if(topic) {
-        queryArray.push(topic)
+    const slug = await db.query(`SELECT slug FROM topics;`)
+    const topicsArray = slug.rows.map(topic => topic.slug)
+    if (!topicsArray.includes(topic)) {
+    return Promise.reject({ status: 400, msg: "Invalid query!"})
+    } 
+    queryArray.push(topic)
         queryStr += ` WHERE topic = $1`;
-    };
-
+    }
+    // .then(({rows})=>{
+    //     const topicsArray = []
+    //     rows.forEach((topic) => {
+    //         topicsArray.push(topic.slug)
+    //     })
+    //     if (!topicsArray.includes(topic)) {
+    //     return Promise.reject({ status: 400, msg: "Invalid query!"})
+    //     } 
+        // queryArray.push(topic)
+        // queryStr += ` WHERE topic = $1`;
+    // })} 
+    
     if(author) {
-        queryStr += queryArray.length ? ` AND` : ` WHERE`
-        queryArray.push(author)
-        queryStr += ` articles.author = $${queryArray.length}`
-    };
+    const username = await db.query(`SELECT username FROM users;`)
+    const authorsArray = username.rows.map(author => author.username)
+    if (!authorsArray.includes(author)) {
+    return Promise.reject({ status: 400, msg: "Invalid query!"})
+    } 
+    queryStr += queryArray.length ? ` AND` : ` WHERE`
+    queryArray.push(author)
+    queryStr += ` articles.author = $${queryArray.length}`
+    }
+
+    // if(author) {
+    //     return db.query(`SELECT username FROM users;`)
+    //     .then(({rows})=>{
+    //         const authorArray = []
+    //         rows.forEach((user) => {
+    //             authorArray.push(user.username)
+    //         })
+    //         console.log(authorArray)
+    //         return authorArray
+    //     })
+    //     .then((authorArray)=>{
+    //     if (!authorArray.includes(author)) {
+    //     return Promise.reject({ status: 400, msg: "Invalid query!"})
+    //     }
+    //     }).catch((err) => console.log(err))
+    //     }
 
     queryStr += 
     ` GROUP BY articles.article_id 
     ORDER BY articles.${sort_by} ${order};`;
 
     return db.query(queryStr, queryArray)
+    
     .then(({rows})=>{
+        if (rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "No articles found!"})
+        }
         return rows
     });
 };  
