@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const { topicData } = require("../db/data/test-data");
+const { topicData, articleData } = require("../db/data/test-data");
 
 exports.fetchArticle = (article_id)=>{
     return db.query(`SELECT articles.*, COUNT(comment_id) ::INT AS comment_count 
@@ -95,6 +95,11 @@ exports.fetchArticles = async (sort_by = "created_at", order = "desc", topic, au
     });
 };  
 
-exports.fetchCommentsForArticle = () => {
-    console.log("inside model")
+exports.fetchCommentsForArticle = (article_id) => {
+    return db.query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
+    .then(({rows})=>{
+        console.log(rows)
+        return rows
+    })
 }
+
