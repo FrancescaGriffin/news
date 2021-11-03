@@ -66,8 +66,8 @@ exports.fetchArticles = async (sort_by = "created_at", order = "desc", topic, au
     //     if (!topicsArray.includes(topic)) {
     //     return Promise.reject({ status: 400, msg: "Invalid query!"})
     //     } 
-        // queryArray.push(topic)
-        // queryStr += ` WHERE topic = $1`;
+    //     queryArray.push(topic)
+    //     queryStr += ` WHERE topic = $1`;
     // })} 
     
     if(author) {
@@ -80,23 +80,6 @@ exports.fetchArticles = async (sort_by = "created_at", order = "desc", topic, au
     queryArray.push(author)
     queryStr += ` articles.author = $${queryArray.length}`
     }
-
-    // if(author) {
-    //     return db.query(`SELECT username FROM users;`)
-    //     .then(({rows})=>{
-    //         const authorArray = []
-    //         rows.forEach((user) => {
-    //             authorArray.push(user.username)
-    //         })
-    //         console.log(authorArray)
-    //         return authorArray
-    //     })
-    //     .then((authorArray)=>{
-    //     if (!authorArray.includes(author)) {
-    //     return Promise.reject({ status: 400, msg: "Invalid query!"})
-    //     }
-    //     }).catch((err) => console.log(err))
-    //     }
 
     queryStr += 
     ` GROUP BY articles.article_id 

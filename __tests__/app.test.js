@@ -228,19 +228,10 @@ describe("app", ()=>{
             expect(body.msg).toEqual(`Invalid query!`)
             });
         });
-        
-    
-    
-    
 
     });
 
 });
-
-// GET /api/articles
-// Bad queries:
-// author / topic that is not in the database
-
 
 
 // - 200 OK
