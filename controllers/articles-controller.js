@@ -1,5 +1,5 @@
 const articles = require("../db/data/test-data/articles");
-const { fetchArticle, updateArticle } = require("../models/articles-model");
+const { fetchArticle, updateArticle, fetchArticles } = require("../models/articles-model");
 
 exports.getArticle = (req, res, next) => {
     const { article_id } = req.params
@@ -17,3 +17,10 @@ exports.patchArticle = (req, res, next) => {
     })
     .catch(next)
 };
+
+exports.getArticles = () => {
+    console.log("inside controller")
+    fetchArticles().then(()=>{
+
+    })
+}

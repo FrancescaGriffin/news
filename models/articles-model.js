@@ -1,7 +1,7 @@
 const db = require("../db/connection");
 
 exports.fetchArticle = (article_id)=>{
-    return db.query(`SELECT articles.*, COALESCE(COUNT(comment_id), 0) AS comment_count 
+    return db.query(`SELECT articles.*, COUNT(comment_id) ::INT AS comment_count 
     FROM articles LEFT OUTER JOIN comments ON comments.article_id = articles.article_id 
     WHERE articles.article_id = $1 
     GROUP BY articles.article_id;`, [article_id])
@@ -25,3 +25,14 @@ exports.updateArticle = (inc_votes, article_id) => {
        return rows[0]
    });
 };
+
+exports.fetchArticles = () => {
+console.log("inside model")
+};
+
+
+
+// `SELECT articles.*, COALESCE(COUNT(comment_id), 0) AS comment_count 
+//     FROM articles LEFT OUTER JOIN comments ON comments.article_id = articles.article_id 
+//     WHERE articles.article_id = $1 
+//     GROUP BY articles.article_id;`

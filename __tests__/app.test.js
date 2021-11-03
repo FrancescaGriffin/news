@@ -30,7 +30,7 @@ describe("GET /api/topics/", ()=>{
         })
 });
 
-describe("GET /api/articles/", ()=>{
+describe("GET /api/articles/:article_id", ()=>{
     it("should return status 200 and article matching the input article_id param", ()=>{
         return request(app).get(`/api/articles/1`).expect(200).then(({body})=>{
             expect(body.article).toEqual({
@@ -41,7 +41,7 @@ describe("GET /api/articles/", ()=>{
                 body: 'I find this existence challenging',
                 created_at: expect.any(String),
                 votes: 100,
-                comment_count: '11'
+                comment_count: 11
             })
         })
     })
@@ -56,7 +56,7 @@ describe("GET /api/articles/", ()=>{
                 body: 'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
                 created_at: expect.any(String),
                 votes: 0,
-                comment_count: '0'
+                comment_count: 0
             })
         })
     })
@@ -70,9 +70,9 @@ describe("GET /api/articles/", ()=>{
             expect(body.msg).toEqual('No articles found!')
         })
      })
-    })
+});
 
-describe("Patch /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
     const increaseVotes = { inc_votes : 1 }
     it("should return status 200 and increase votes by 1", ()=>{
         return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
@@ -117,14 +117,35 @@ describe("Patch /api/articles/:article_id", () => {
     it("should return status 400 with invalid inc_votes input e.g.{ incVotes: 1 }", ()=>{
         const badPatchRequest = { not_inVotes: 1 }
        return request(app).patch(`/api/articles/1`).send(badPatchRequest).expect(400).then(({body})=>{
-           console.log(body)
            expect(body.msg).toEqual('Invalid Input!')
        })
     });    
 
-})
 });
 
+// describe("GET /api/articles", ()=>{
+//     it("should return status 200 and an articles array of article objects ", ()=>{
+//         return request(app).get("/api/articles").expect(200).then(({body})=>{
+//             console.log(body)
+//             expect(body.articles).toBeInstanceOf(Array);
+//             expect(body.articles).toHaveLength(4);
+//         })
+//     })
+// })
+
+});
+
+
+// return request(app).get(`/api/articles/1`).expect(200).then(({body})=>{
+//     expect(body.article).toEqual({
+//         article_id: 1,
+//         title: 'Living in the shadow of a great man',
+//         topic: 'mitch',
+//         author: 'butter_bridge',
+//         body: 'I find this existence challenging',
+//         created_at: expect.any(String),
+//         votes: 100,
+//         comment_count: '11'
 
 
 // - 200 OK
