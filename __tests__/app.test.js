@@ -231,6 +231,25 @@ describe("app", ()=>{
 
     });
 
+    describe("GET /api/articles/:article_id/comments", ()=>{
+        it("should return status 200 and an array of comments for the given article_id", ()=>{
+            return request(app).get(`/api/articles/1/comments`).expect(200).then(({body})=>{
+                expect(body.comments).toHaveLength(2);
+                body.comments.forEach((comment) =>{
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            author: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(Number)
+                        })
+                 })
+
+        })
+    })
+
+});
+
 });
 
 

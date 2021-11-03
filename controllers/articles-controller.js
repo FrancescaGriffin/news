@@ -1,4 +1,4 @@
-const { fetchArticle, updateArticle, fetchArticles } = require("../models/articles-model");
+const { fetchArticle, updateArticle, fetchArticles, fetchCommentsForArticle } = require("../models/articles-model");
 
 exports.getArticle = (req, res, next) => {
     const { article_id } = req.params
@@ -24,3 +24,11 @@ exports.getArticles = (req, res, next) => {
     })
     .catch(next)
 };
+
+exports.getCommentsForArticle = () => {
+    console.log("inside controllers")
+    fetchCommentsForArticle().then(()=> {
+        res.status().send()
+
+    })
+}

@@ -94,3 +94,7 @@ exports.fetchArticles = async (sort_by = "created_at", order = "desc", topic, au
         return rows
     });
 };  
+
+exports.fetchCommentsForArticle = () => {
+    console.log("inside model")
+}
