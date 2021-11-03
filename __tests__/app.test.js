@@ -14,7 +14,7 @@ describe("app", ()=>{
         })
     })
 
-describe("GET /api/topics", ()=>{
+describe("GET /api/topics/", ()=>{
     it("should return status 200 and an object with key name : array of objects", ()=>{
         return request(app).get("/api/topics").expect(200).then(({body})=>{
             expect(body.topics.length).toBe(3)
@@ -71,6 +71,7 @@ describe("GET /api/articles/", ()=>{
         })
     })
 })
+
 describe("Patch /api/articles/:article_id", () => {
     it("should return status 200 and increase votes by 1", ()=>{
         const increaseVotes = { inc_votes : 1 }
@@ -83,13 +84,32 @@ describe("Patch /api/articles/:article_id", () => {
                 body: 'I find this existence challenging',
                 created_at: expect.any(String),
                 votes: 101
+            })
         })
     })
-})
+    it("should return status 200 and increase votes by 1", ()=>{
+        const increaseVotes = { inc_votes : 1 }
+        return request(app).patch("/api/articles/1").send(increaseVotes).expect(200).then(({body})=>{
+            expect(body.article).toEqual({
+                article_id: 1,
+                title: 'Living in the shadow of a great man',
+                topic: 'mitch',
+                author: 'butter_bridge',
+                body: 'I find this existence challenging',
+                created_at: expect.any(String),
+                votes: 101
+            })
+        })
+    })
 
 })
 
 });
+
+//  return 404 no articles found! - with valid param that doesn't exist
+// return 400 bad request - Invalid inc_votes (e.g. { inc_votes : "cat" })
+// return 204 
+
 
 // - 200 OK
 // - 201 Created
@@ -101,3 +121,6 @@ describe("Patch /api/articles/:article_id", () => {
 // - 422 Unprocessable Entity
 // - 500 Internal Server Error
 
+// No inc_votes on request body
+// Invalid inc_votes (e.g. { inc_votes : "cat" })
+// Some other property on request body (e.g. { inc_votes : 1, name: 'Mitch' })

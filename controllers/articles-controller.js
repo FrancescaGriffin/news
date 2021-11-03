@@ -15,4 +15,4 @@ exports.patchArticle = (req, res, next) => {
     updateArticle(inc_votes, article_id).then((article)=>{
         res.status(200).send({article})
     })
-}
+};
