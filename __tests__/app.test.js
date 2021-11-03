@@ -126,7 +126,6 @@ describe("PATCH /api/articles/:article_id", () => {
 describe("GET /api/articles", ()=>{
     it("should return status 200 and an articles array of article objects ", ()=>{
         return request(app).get("/api/articles").expect(200).then(({body})=>{
-            console.log(body)
             expect(body.articles).toBeInstanceOf(Array);
             expect(body.articles).toHaveLength(12);
             body.articles.forEach((article) =>{
@@ -135,13 +134,57 @@ describe("GET /api/articles", ()=>{
                     title: expect.any(String),
                     topic: expect.any(String),
                     author: expect.any(String),
-                    created_at: expect.any(Number),
+                    created_at: expect.any(String),
                     votes: expect.any(Number),
                     comment_count: expect.any(Number)
-            })
+                })
+         })
+     })
+    });
+    
+    it("should return status 200 and the articles array sort_by defaulted to date", ()=>{
+        return request(app).get("/api/articles").expect(200).then(({body})=>{
+            expect(body.articles).toBeInstanceOf(Array);
+            expect(body.articles).toHaveLength(12);
+            expect(body.articles).toBeSortedBy('created_at', {
+                descending: true })
+
+        })
+    });
+
+    it("should return status 200 and the articles array sort_by votes", ()=>{
+        return request(app).get("/api/articles?sort_by=votes").expect(200).then(({body})=>{
+            expect(body.articles).toBeInstanceOf(Array);
+            expect(body.articles).toHaveLength(12);
+            expect(body.articles).toBeSortedBy('votes', { descending: true })
+        })
+    });
+
+    it("should return status 200 and the articles array order by default to descending", ()=>{
+        return request(app).get("/api/articles?sort_by=article_id").expect(200).then(({body})=>{
+            expect(body.articles).toBeInstanceOf(Array);
+            expect(body.articles).toHaveLength(12);
+            expect(body.articles).toBeSorted({ descending: true })
+        })
+    });
+
+    it("should return status 200 and the articles array order should be ascending", ()=>{
+        return request(app).get("/api/articles?order=asc").expect(200).then(({body})=>{
+            expect(body.articles).toBeInstanceOf(Array);
+            expect(body.articles).toHaveLength(12);
+            expect(body.articles).toBeSorted()
+        })
+    });
+
+    it.only("should return status 200 and the articles filtered if topic value specified in the query", () => {
+        return request(app).get("/api/articles/topic=cats").expect(200).then(({body})=>{
+            expect(body.articles).toBeInstanceOf(Array);
+            expect(body.articles).toHaveLength(1);
+            expect(body.articles.topic).toEqual('cats')
         })
     })
-})
+
+
 
 });
 

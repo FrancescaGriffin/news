@@ -4,7 +4,7 @@ const { fetchArticle, updateArticle, fetchArticles } = require("../models/articl
 exports.getArticle = (req, res, next) => {
     const { article_id } = req.params
     fetchArticle(article_id).then((article)=>{
-        res.status(200).send({article})
+        res.status(200).send({ article })
     })
     .catch(next)
 };
@@ -13,14 +13,16 @@ exports.patchArticle = (req, res, next) => {
     const { inc_votes } = req.body
     const { article_id } = req.params
     updateArticle(inc_votes, article_id).then((article)=>{
-        res.status(200).send({article})
+        res.status(200).send({ article })
     })
     .catch(next)
 };
 
-exports.getArticles = () => {
-    console.log("inside controller")
-    fetchArticles().then(()=>{
-
+exports.getArticles = (req, res, next) => {
+    const { sort_by } = req.query
+    const { order } = req.query
+    fetchArticles(sort_by, order).then((articles)=>{
+        res.status(200).send({ articles })
     })
+    .catch(next)
 }

@@ -26,9 +26,37 @@ exports.updateArticle = (inc_votes, article_id) => {
    });
 };
 
-exports.fetchArticles = () => {
-console.log("inside model")
-};
+exports.fetchArticles = (sort_by = "created_at", order = "desc") => {
+    if(!['article_id', 'created_at', 'votes'].includes(sort_by)) {
+        return Promise.reject({ status: 400, msg: "Invalid sort_by_query!"})
+    }
+
+    if(!['asc', 'desc'].includes(order)) {
+        return Promise.reject({ status: 400, msg: "Invalid sort_by_query!"})
+    }
+
+    let queryStr = `SELECT 
+    articles.article_id, 
+    articles.title, 
+    articles.topic, 
+    articles.author, 
+    articles.created_at, 
+    articles.votes, 
+    COUNT(comment_id) ::INT AS comment_count 
+    FROM articles LEFT OUTER JOIN comments ON comments.article_id = articles.article_id`;
+    
+    
+    
+    GROUP BY articles.article_id 
+    ORDER BY articles.${sort_by} ${order};`
+
+
+
+    return db.query(queryStr, 
+    .then(({rows})=>{
+        return rows
+    })
+};  
 
 
 
