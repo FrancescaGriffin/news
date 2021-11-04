@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const apiRouter = require("./routers/api-router")
-const { handlePSQLErrors, handle500Errors, handleCustomErrors} = require("./errors")
+const { handlePSQLErrors, handle500Errors, handleCustomErrors, handleMethodErrors} = require("./errors")
 
 app.use(express.json());
 
@@ -14,6 +14,7 @@ app.all("/*", (req, res) => {
 
 app.use(handleCustomErrors)
 app.use(handlePSQLErrors)
+// app.use(handleMethodErrors)
 app.use(handle500Errors)
 
 

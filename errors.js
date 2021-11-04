@@ -17,7 +17,10 @@ exports.handlePSQLErrors = (err, req, res, next) => {
     }
 };
 
+// exports.handleMethodErrors = (arr, req ,res ,next) => {
+//     res.status(400).send({ msg: "Method Not Allowed"})
+// }
+
 exports.handle500Errors = (err, req, res, next) => {
-    console.log(err)
     res.status(500).send({ msg: 'Internal Server Error :( Sorry!'})
 }

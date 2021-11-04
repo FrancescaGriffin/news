@@ -100,7 +100,7 @@ exports.fetchCommentsForArticle = (article_id) => {
     return db.query(`SELECT comment_id, author, created_at, votes, body FROM comments WHERE article_id = $1`, [article_id])
     .then(({rows})=>{
         if(rows.length === 0) {
-            return Promise.reject({ status: 404, msg: "Not found!"})
+            return Promise.reject({ status: 404, msg: "No Comments Found!"})
         }
         return rows
     });

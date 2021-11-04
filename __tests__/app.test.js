@@ -46,7 +46,7 @@ describe("app", ()=>{
         })
         })
 
-    it("should return status 200 and article matching the input article_id param", ()=>{
+    it("should return status 200 and article matching the input article_id param (No comments check)", ()=>{
         return request(app).get(`/api/articles/2`).expect(200).then(({body})=>{
             expect(body.article).toEqual({
                 article_id: 2,
@@ -60,11 +60,13 @@ describe("app", ()=>{
             })
         })
         })
+
     it("should return status 400 when input article_id is invalid", ()=>{
         return request(app).get(`/api/articles/invalid`).expect(400).then(({body})=>{
             expect(body.msg).toEqual(`Invalid Input!`)
         })
         })
+
     it("should return status 404 when input article_id is valid but doesn't exist", ()=>{
         return request(app).get(`/api/articles/100`).expect(404).then(({body})=>{
             expect(body.msg).toEqual('No article found!')
@@ -252,7 +254,7 @@ describe("app", ()=>{
 
         it("should return status 404 when input article_id is valid but article has no comments ", ()=>{
            return request(app).get("/api/articles/2/comments").expect(404).then(({body})=>{
-                expect(body.msg).toEqual("Not found!")
+                expect(body.msg).toEqual("No Comments Found!")
             })
         })
 
@@ -264,7 +266,7 @@ describe("app", ()=>{
 
          it("should return status 404 when input article_id is valid but doesn't exist e.g 100", ()=>{
             return request(app).get("/api/articles/100/comments").expect(404).then(({body})=>{
-                 expect(body.msg).toEqual("Not found!")
+                 expect(body.msg).toEqual("No Comments Found!")
              })
          })
 
@@ -345,8 +347,4 @@ describe("app", ()=>{
 
     });
 
-
 });
-
-// /api/resource/99 -> resource that does not exist: 404 Not Found
-// /api/resource/notAnId -> invalid ID: 400 Bad Request
