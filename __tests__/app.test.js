@@ -281,10 +281,25 @@ describe("app", ()=>{
                 })
             })
         })
+
+        it("should not post and return status 400 when username does not exist", ()=>{
+            const badRequest = {username: 'notausername', body: 'error test'}
+            return request(app).post('/api/articles/12/comments').send(badRequest).expect(400).then(({body})=>{
+                expect(body.msg).toEqual("Invalid Input!")
+            })
+        })
+
+        it("should not post and return status 404 when article_id valid but does not exist", ()=>{
+            const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3"}
+            return request(app).post('/api/articles/100/comments').send(newComment).expect(404).then(({body})=>{
+                expect(body.msg).toEqual("Article Not Found!")
+            })
+        })
+
+
+
     })
 });
-
-
 
 
 // POST /api/articles/:article_id/comments

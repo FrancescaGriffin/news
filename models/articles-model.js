@@ -107,8 +107,18 @@ exports.fetchCommentsForArticle = (article_id) => {
 };
 
 exports.addingAComment = (username, body, article_id) => {
+
+    return db.query(`SELECT username FROM users`).then(({rows})=>{
+        const usersArray = rows.map(user => user.username)
+        return usersArray
+    }).then((usersArray)=>{
+        if (!usersArray.includes(username)) {
+            return Promise.reject({ status: 400, msg: 'Invalid Input!'})
+        }
+
     return db.query(`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`, [ username, body, article_id])
     .then(({rows})=>{
         return rows[0]
     })
+})
 }
