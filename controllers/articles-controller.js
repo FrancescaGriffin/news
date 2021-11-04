@@ -1,4 +1,4 @@
-const { fetchArticle, updateArticle, fetchArticles, fetchCommentsForArticle } = require("../models/articles-model");
+const { fetchArticle, updateArticle, fetchArticles, fetchCommentsForArticle, addingAComment } = require("../models/articles-model");
 
 exports.getArticle = (req, res, next) => {
     const { article_id } = req.params
@@ -32,3 +32,10 @@ exports.getCommentsForArticle = (req, res, next) => {
     })
     .catch(next)
 };
+exports.postAComment = (req, res, next) => {
+    console.log("inside controller")
+    addingAComment().then((newComment)=>{
+        res.status(200).send({ newComment })
+    })
+
+}

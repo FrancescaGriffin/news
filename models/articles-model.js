@@ -105,3 +105,8 @@ exports.fetchCommentsForArticle = (article_id) => {
         return rows
     });
 };
+
+exports.addingAComment = () => {
+    console.log("inside model")
+
+}

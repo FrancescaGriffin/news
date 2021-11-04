@@ -271,7 +271,7 @@ describe("app", ()=>{
         const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3"}
         it("should return status 200 along with the posted comment", ()=>{
             return request(app).post('/api/articles/12/comments').send(newComment).expect(200).then(({body})=>{
-                expect(body.new_comment).toMatchObject({
+                expect(body.newComment).toMatchObject({
                     comment_id: 19,
                     author: 'rogersop',
                     article_1d: 12,
