@@ -334,14 +334,3 @@ describe("app", ()=>{
 
 
 });
-
-
-// POST /api/articles/:article_id/comments
-// Request body accepts:
-
-// an object with the following properties:
-// username
-// body
-// Responds with:
-
-// the posted comment
