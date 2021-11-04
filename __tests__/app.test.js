@@ -265,10 +265,36 @@ describe("app", ()=>{
              })
          })
 
+    });
+
+    describe("POST /api/articles/:article_id/comments", ()=>{
+        const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3"}
+        it("should return status 200 along with the posted comment", ()=>{
+            return request(app).post('/api/articles/12/comments').send(newComment).expect(200).then(({body})=>{
+                expect(body.new_comment).toMatchObject({
+                    comment_id: 19,
+                    author: 'rogersop',
+                    article_1d: 12,
+                    votes: 0,
+                    created_at: expect.any(String),
+                    body: "it's majestic!! I want one <3"
+                })
+                // expect(body.comments).toHaveLength(19);
+
+            })
+        })
+    })
 });
-});
 
 
 
 
-// 404 not found - valid but doesn't exist
+// POST /api/articles/:article_id/comments
+// Request body accepts:
+
+// an object with the following properties:
+// username
+// body
+// Responds with:
+
+// the posted comment
