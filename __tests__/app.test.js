@@ -267,7 +267,7 @@ describe("app", ()=>{
 
     });
 
-    describe.only("POST /api/articles/:article_id/comments", ()=>{
+    describe("POST /api/articles/:article_id/comments", ()=>{
         const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3"}
         it("should return status 200 along with the posted comment", ()=>{
             return request(app).post('/api/articles/12/comments').send(newComment).expect(200).then(({body})=>{
@@ -304,11 +304,19 @@ describe("app", ()=>{
         })
 
         it("should not post and return 400 when username or body does not exist in request", ()=>{
-            const newComment = {notusername: 'rogersop', notbody: "it's majestic!! I want one <3"}
-            return request(app).post('/api/articles/12/comments').send(newComment).expect(400).then(({body})=>{
+            const badRequest = {notusername: 'rogersop', notbody: "it's majestic!! I want one <3"}
+            return request(app).post('/api/articles/12/comments').send(badRequest).expect(400).then(({body})=>{
                 expect(body.msg).toEqual("Invalid Input!")
             })
         })
+
+        it("should not post and return 400 when null value in username or body request", ()=>{
+            const badRequest = {notusername: null, notbody: "it's majestic!! I want one <3"}
+            return request(app).post('/api/articles/12/comments').send(badRequest).expect(400).then(({body})=>{
+                expect(body.msg).toEqual("Invalid Input!")
+            })
+        })
+
 
 
     })
