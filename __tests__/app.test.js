@@ -248,8 +248,8 @@ describe("app", ()=>{
         })
 
         it("should return status 404 when input article_id is valid but article has no comments ", ()=>{
-           return request(app).get("/api/articles/2/comments").expect(400).then(({body})=>{
-                expect(body.msg).toEqual("No comments found!")
+           return request(app).get("/api/articles/2/comments").expect(404).then(({body})=>{
+                expect(body.msg).toEqual("Not found!")
             })
         })
 
@@ -259,10 +259,16 @@ describe("app", ()=>{
              })
          })
 
+         it("should return status 404 when input article_id is valid but doesn't exist e.g 100", ()=>{
+            return request(app).get("/api/articles/100/comments").expect(404).then(({body})=>{
+                 expect(body.msg).toEqual("Not found!")
+             })
+         })
+
 });
 });
 
 
-// 400 bad request - invalid params
+
+
 // 404 not found - valid but doesn't exist
-// 404 not found - existing article with no comments attached
