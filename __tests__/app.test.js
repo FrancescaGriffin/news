@@ -337,7 +337,11 @@ describe("app", ()=>{
             })
         })
 
-
+        it("should return status 400 if comment_id is invalid", ()=>{
+            return request(app).delete("/api/comments/not_valid").expect(400).then(({body})=>{
+                expect(body.msg).toEqual("Invalid Input!")
+            })
+        })
 
     });
 
