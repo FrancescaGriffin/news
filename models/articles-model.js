@@ -106,7 +106,9 @@ exports.fetchCommentsForArticle = (article_id) => {
     });
 };
 
-exports.addingAComment = () => {
-    console.log("inside model")
-
+exports.addingAComment = (username, body, article_id) => {
+    return db.query(`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`, [ username, body, article_id])
+    .then(({rows})=>{
+        return rows[0]
+    })
 }
