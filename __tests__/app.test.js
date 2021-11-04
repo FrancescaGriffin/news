@@ -296,6 +296,19 @@ describe("app", ()=>{
             })
         })
 
+        it("should not post and return 400 when article_id is invalid", ()=>{
+            const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3"}
+            return request(app).post('/api/articles/invalid_id/comments').send(newComment).expect(400).then(({body})=>{
+                expect(body.msg).toEqual("Invalid Input!")
+            })
+        })
+
+        it("should not post and return 400 when username or body does not exist in request", ()=>{
+            const newComment = {notusername: 'rogersop', notbody: "it's majestic!! I want one <3"}
+            return request(app).post('/api/articles/12/comments').send(newComment).expect(400).then(({body})=>{
+                expect(body.msg).toEqual("Invalid Input!")
+            })
+        })
 
 
     })

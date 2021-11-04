@@ -108,6 +108,10 @@ exports.fetchCommentsForArticle = (article_id) => {
 
 exports.addingAComment = (username, body, article_id) => {
 
+    if(!username || !body) {
+        return Promise.reject({ status: 400, msg: 'Invalid Input!'})
+    }
+
     return db.query(`SELECT username FROM users`).then(({rows})=>{
         const usersArray = rows.map(user => user.username)
         return usersArray
