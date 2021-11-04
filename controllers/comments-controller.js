@@ -6,4 +6,5 @@ exports.getComment = (req, res, next) => {
     fetchComment(comment_id).then(()=>{
         res.status(204).send()
     })
+    .catch(next)
 }

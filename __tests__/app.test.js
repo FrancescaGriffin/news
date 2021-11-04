@@ -330,7 +330,19 @@ describe("app", ()=>{
                 })
             })
         })
+
+        it("should return status 404 if comment_id is valid but does not exist", ()=>{
+            return request(app).delete("/api/comments/100").expect(404).then(({body})=>{
+                expect(body.msg).toEqual("Comment Not Found!")
+            })
+        })
+
+
+
     });
 
 
 });
+
+// /api/resource/99 -> resource that does not exist: 404 Not Found
+// /api/resource/notAnId -> invalid ID: 400 Bad Request
