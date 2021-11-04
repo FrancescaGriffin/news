@@ -229,6 +229,9 @@ describe("app", ()=>{
             });
         });
 
+    it("should return status 200 when query in invalid e.g. ", ()=>{
+        return request(app).get("/api/articles?not_sort_by=not_valid").expect(200)
+        });
     });
 
     describe("GET /api/articles/:article_id/comments", ()=>{
@@ -317,9 +320,19 @@ describe("app", ()=>{
             })
         })
 
+    });
+
+    describe("DELETE /api/comments/:comment_id", ()=>{
+        it("should return status 204 with No content when comment successfully deleted", ()=>{
+            return request(app).delete("/api/comments/18").expect(204).then(()=> {
+                return db.query('SELECT * FROM comments').then(({rows})=>{
+                    expect(rows).toHaveLength(17)
+                })
+            })
+        })
+    });
 
 
-    })
 });
 
 
