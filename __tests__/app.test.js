@@ -347,4 +347,14 @@ describe("app", ()=>{
 
     });
 
+    describe("GET /api", ()=>{
+        it("should return status 200 with a display of all the possible endpoints", ()=>{
+            return request(app).get("/api").expect(200).then(({body})=>{
+                expect(typeof body).toBe('object')
+            })
+        })
+    })
+
+
+
 });
