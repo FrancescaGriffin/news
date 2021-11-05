@@ -375,5 +375,20 @@ describe("app", ()=>{
         })
     });
 
+    describe.only("GET /api/users", ()=>{
+        it("should return status 200 and an array of username objects", ()=>{
+            return request(app).get("/api/users").expect(200).then(({body})=>{
+                expect(body.users).toHaveLength(4)
+                body.users.forEach((user)=>{
+                    expect(user).toEqual(
+                    expect.toMatchObject({
+                        username: expect.any(String)
+                        })
+                    )
+                })
+            })
+        })
+    });
+
 
 });

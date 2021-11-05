@@ -14,7 +14,6 @@ app.all("/*", (req, res) => {
 
 app.use(handleCustomErrors)
 app.use(handlePSQLErrors)
-// app.use(handleMethodErrors)
 app.use(handle500Errors)
 
 
