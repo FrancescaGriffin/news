@@ -353,8 +353,7 @@ describe("app", ()=>{
                 expect(typeof body).toBe('object')
             })
         })
-    })
-
+    });
 
 
 });
