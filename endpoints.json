@@ -18,10 +18,61 @@
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
           "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+          "created_at": 1600277160000,
+          "article_id": 33,
+          "votes": 0,
+          "comment_count": 6
         }
       ]
     }
-  }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves a specific article",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+        "title": "Running a Node App",
+        "topic": "coding",
+        "author": "jessjelly",
+        "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+        "created_at": 1604728980000,
+        "votes": 0,
+        "comment_count": 8
+      }
+    } 
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates a specific articles votes",
+    "queries": [],
+    "example request body": { "Inc_votes": 1 },
+    "example of use": "The above request body will increment the votes count by 1 for the specific article indicated, and respond with the updated article",
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+        "title": "Running a Node App",
+        "topic": "coding",
+        "author": "jessjelly",
+        "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+        "created_at": 1604728980000,
+        "votes": 1
+      }
+    } 
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array for all the comments for a specific article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": {
+        "comment_id": 82,
+        "body": "Nihil laborum qui quidem quibusdam aut deserunt laboriosam. Enim ipsa corporis. Nobis ipsa deleniti natus nulla qui ut vero sequi. Perferendis eveniet eligendi est itaque repellat. Illum hic nesciunt omnis veniam recusandae architecto et. Cumque qui mollitia ipsam impedit nemo.",
+        "votes": 1,
+        "author": "grumpy19",
+        "created_at": 1601601120000
+      }
+    }
+  },
+  "POST /api/articles/:article_id/comments"
 }
+
+
