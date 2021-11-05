@@ -388,5 +388,16 @@ describe("app", ()=>{
         })
     });
 
+    describe.only("GET /api/users/:username", ()=>{
+        it("should return status 200 and the user matching the input username params", ()=>{
+            return request(app).get("/api/users/butter_bridge").expect(200).then(({body})=>{
+                expect(body.user).toMatchObject({
+                    username: 'butter_bridge',
+                    name: 'jonny',
+                    avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+                })
+            })
+        })
+    })
 
 });
