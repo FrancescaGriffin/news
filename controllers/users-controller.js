@@ -8,8 +8,9 @@ exports.getAllUsers = (req, res, next) => {
 }
 
 exports.getUser = (req, res, next) => {
-    console.log("inside controller")
-    fetchUser().then((user)=>{
+    const { username } = req.params
+    fetchUser(username).then((user)=>{
         res.status(200).send({ user })
     })
+    .catch(next)
 }
