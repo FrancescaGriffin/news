@@ -1,5 +1,7 @@
 const db = require("../db/connection");
 
 exports.fetchUsers = () => {
-    console.log("inside models")
+    return db.query(`SELECT username FROM users`).then(({rows})=>{
+        return rows
+    })
 }
