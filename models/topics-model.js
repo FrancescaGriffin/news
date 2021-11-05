@@ -5,4 +5,4 @@ exports.fetchTopics = () => {
    .then(({rows})=>{
         return rows
    })
-}
+};

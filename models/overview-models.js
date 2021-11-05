@@ -1,5 +1,7 @@
 const db = require("../db/connection");
+const endpointsOverview = require('../endpoints.json')
 
-exports.fetchOverview = ()=>{
-    console.log("inside model")
+exports.fetchOverview =  async ()=>{
+    return endpointsOverview
 }
+
