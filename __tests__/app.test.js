@@ -406,4 +406,11 @@ describe("app", ()=>{
         })
     })
 
+    // describe("PATCH /api/comments/:comment_id", ()=>{
+    //     it("should should return status 200, and the updated comment with votes increases votes by desired amount (1)", ()=>{
+    //         const increaseVotes = { inc_votes : 1 }
+    //         return request(app).patch("/api/comments/1").send(increaseVotes).expect(200).then(({body})=>{
+    //     })
+    // })
+
 });
