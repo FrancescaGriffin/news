@@ -275,8 +275,8 @@ describe("app", ()=>{
 
     describe("POST /api/articles/:article_id/comments", ()=>{
         const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3"}
-        it("should return status 200 along with the posted comment", ()=>{
-            return request(app).post('/api/articles/12/comments').send(newComment).expect(200).then(({body})=>{
+        it("should return status 201 along with the posted comment", ()=>{
+            return request(app).post('/api/articles/12/comments').send(newComment).expect(201).then(({body})=>{
                 expect(body.newComment).toMatchObject({
                     comment_id: 19,
                     author: 'rogersop',
@@ -320,6 +320,23 @@ describe("app", ()=>{
             const badRequest = {notusername: null, notbody: "it's majestic!! I want one <3"}
             return request(app).post('/api/articles/12/comments').send(badRequest).expect(400).then(({body})=>{
                 expect(body.msg).toEqual("Invalid Input!")
+            })
+        })
+
+        it("should return status 201 along with posted comment if there is an extra property in post request (which will be ignored", ()=>{
+            const newComment = {username: 'rogersop', body: "it's majestic!! I want one <3", extra: "ignored"}
+            return request(app).post('/api/articles/12/comments').send(newComment).expect(201).then(({body})=>{
+                expect(body.newComment.body).toEqual("it's majestic!! I want one <3")
+                expect(body.newComment.author).toEqual('rogersop')
+                expect(body.newComment.votes).toEqual(0)
+                expect(body.newComment).toMatchObject({
+                    comment_id: 19,
+                    author: 'rogersop',
+                    article_id: 12,
+                    votes: 0,
+                    created_at: expect.any(String),
+                    body: "it's majestic!! I want one <3" 
+                })
             })
         })
 

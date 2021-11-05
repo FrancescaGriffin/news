@@ -36,7 +36,7 @@ exports.postAComment = (req, res, next) => {
     const { article_id } = req.params
     const { username, body } = req.body
     addingAComment(username, body, article_id).then((newComment)=>{
-        res.status(200).send({ newComment })
+        res.status(201).send({ newComment })
     })
     .catch(next)
 }
