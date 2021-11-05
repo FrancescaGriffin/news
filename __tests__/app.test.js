@@ -3,7 +3,7 @@ const testData = require('../db/data/test-data/index.js');
 const seed = require('../db/seeds/seed.js');
 const app = require("../app")
 const request = require('supertest')
-const endpointsOverview = require('../endpoints.json')
+const endpoints = require('../endpoints.json')
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -352,7 +352,7 @@ describe("app", ()=>{
         it("should return status 200 with a display of all the possible endpoints", ()=>{
             return request(app).get("/api").expect(200).then(({body})=>{
                 expect(typeof body).toBe('object')
-                expect(body.overview).toEqual(endpointsOverview)
+                expect(body.endpoints).toEqual(endpoints)
 
             })
         })

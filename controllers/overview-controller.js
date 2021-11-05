@@ -1,8 +1,6 @@
-const { fetchOverview } = require("../models/overview-models")
+const endpoints = require("../endpoints.json")
  
 exports.getOverview = (req, res, next)=>{
-    fetchOverview().then((overview)=>{
-        res.status(200).send({overview})
-    })
+        res.status(200).send({endpoints})
     .catch(next)
 };
