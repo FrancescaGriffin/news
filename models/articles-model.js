@@ -82,7 +82,7 @@ exports.fetchArticles = async (sort_by = "created_at", order = "desc", topic, au
 
     queryStr += 
     ` GROUP BY articles.article_id 
-    ORDER BY articles.${sort_by} ${order};`;
+    ORDER BY ${sort_by} ${order};`;
 
     return db.query(queryStr, queryArray)
     
