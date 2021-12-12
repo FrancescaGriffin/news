@@ -11,7 +11,7 @@ Heroku currently hosts this project; the link below will take you to a list of a
 
 [Hosted Version](https://firstnews.herokuapp.com/api)
 
-If you would like to view the Front End to this project created with React, the link links below will take you to the repository and the hosted version.
+If you would like to view the Front End to this project created with React, the links below will take you to the repository and the hosted version.
 
 [Front-End Repository](https://github.com/FrancescaGriffin/nc-news)
 
